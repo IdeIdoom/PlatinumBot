@@ -21,6 +21,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+    <ItemGroup>
+    <Content Include="Data\CG\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 
 </Project>
