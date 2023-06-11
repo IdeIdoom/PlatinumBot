@@ -2,6 +2,7 @@ using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using PlatinumBot.Common;
 using PlatinumBot.Init;
 
@@ -55,9 +56,17 @@ public class CommandHandler : ICommandHandler
 
         // Create a Command Context.
         var context = new ShardedCommandContext(_client, msg);
+        var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
+        var prefix = config.GetRequiredSection("Settings:SetPrefix").Value;
+        if(string.IsNullOrWhiteSpace(prefix))
+        {
+            prefix = config.GetRequiredSection("Settings:DefaultPrefix").Value;
+            if(string.IsNullOrWhiteSpace(prefix))
+            prefix = "!";
+        }
 
         var markPos = 0;
-        if (msg.HasCharPrefix('!', ref markPos) || msg.HasCharPrefix('?', ref markPos))
+        if (msg.HasCharPrefix(prefix.ToCharArray()[0], ref markPos))
         {
             var result = await _commands.ExecuteAsync(context, markPos, Bootstrapper.ServiceProvider);
         }
