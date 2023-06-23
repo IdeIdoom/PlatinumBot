@@ -12,6 +12,7 @@ public class CommandHandler : ICommandHandler
 {
     private readonly DiscordShardedClient _client;
     private readonly CommandService _commands;
+    private char prefix = '.';
 
     public CommandHandler(
         DiscordShardedClient client,
@@ -56,19 +57,16 @@ public class CommandHandler : ICommandHandler
 
         // Create a Command Context.
         var context = new ShardedCommandContext(_client, msg);
-        var config = new ConfigurationBuilder().AddJsonFile($"appsettings.json").Build();
-        var prefix = config.GetRequiredSection("Settings:SetPrefix").Value;
-        if(string.IsNullOrWhiteSpace(prefix))
-        {
-            prefix = config.GetRequiredSection("Settings:DefaultPrefix").Value;
-            if(string.IsNullOrWhiteSpace(prefix))
-            prefix = "!";
-        }
 
         var markPos = 0;
-        if (msg.HasCharPrefix(prefix.ToCharArray()[0], ref markPos))
+        if (msg.HasCharPrefix(prefix, ref markPos))
         {
             var result = await _commands.ExecuteAsync(context, markPos, Bootstrapper.ServiceProvider);
         }
+    }
+
+    public void SetPrefix(String prefix) 
+    {
+        this.prefix = prefix.ToCharArray()[0];
     }
 }
