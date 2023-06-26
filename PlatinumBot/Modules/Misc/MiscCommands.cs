@@ -1,7 +1,7 @@
 using Discord;
 using Discord.Commands;
 using RunMode = Discord.Commands.RunMode;
-using PlatinumBot.Modules;
+using PlatinumBot.Services;
 using PlatinumBot.Data;
 using Newtonsoft.Json;
 
@@ -11,6 +11,7 @@ namespace PlatinumBot.Modules.Misc;
 public class MiscCommands : ModuleBase<ShardedCommandContext>
 {
     public CommandService CommandService { get; set; }
+    public DbService DbService { get; set; }
 
     [Command("hello", RunMode = RunMode.Async)]
     public async Task Hello()
@@ -27,11 +28,9 @@ public class MiscCommands : ModuleBase<ShardedCommandContext>
     [Command("8ball", RunMode = RunMode.Async)]
     public async Task EightBall()
     {
-        JSONLoader jsonLoader = new JSONLoader();
-        jsonLoader.Load("./data/eightball.json");
-        EightBallResponses? responses = JsonConvert.DeserializeObject<EightBallResponses>(jsonLoader.JsonData);
         Random random = new Random();
+        int pos = random.Next(0, DbService.EightBallResponses.Count);
 
-        await Context.Message.ReplyAsync($"{Context.User.Username}'s result: {responses?.Responses.ElementAt(random.Next(0, responses.Responses.Count)).Response}");
+        await Context.Message.ReplyAsync($"{Context.User.Username}'s result: {DbService.EightBallResponses[pos]}");
     }
 }

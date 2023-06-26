@@ -1,25 +1,25 @@
-using PlatinumBot.Modules;
+using PlatinumBot.Services;
 
-namespace PlatinumBot.Modules;
+namespace PlatinumBot.Data;
 
-public class Operator
+public class ArknightsOperator
 {
     public string Name { get; private set;}
     public string Description { get; private set;}
 
-    public Operator() 
+    public ArknightsOperator() 
     {
         Name = "";
         Description = "";
     }
 
-    public Operator(string name, string description)
+    public ArknightsOperator(string name, string description)
     {
         Name = name;
         Description = description;
     }
     public void LoadFromJson(JSONLoader jsonLoader)
     {
-
+        
     }
 }

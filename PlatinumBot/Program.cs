@@ -6,6 +6,7 @@ using PlatinumBot.Init;
 using PlatinumBot.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PlatinumBot.Data;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.json")
@@ -26,12 +27,16 @@ var commands = new CommandService(new CommandServiceConfig
     CaseSensitiveCommands = false,
 });
 
+var db = new DbService();
+db.Init();
+
 // Setup your DI container.
 Bootstrapper.Init();
 Bootstrapper.RegisterInstance(client);
 Bootstrapper.RegisterInstance(commands);
 Bootstrapper.RegisterType<ICommandHandler, CommandHandler>();
 Bootstrapper.RegisterInstance(config);
+Bootstrapper.RegisterInstance(db);
 
 await MainAsync();
 
