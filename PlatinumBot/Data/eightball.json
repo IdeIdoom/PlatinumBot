@@ -1,0 +1,10 @@
+{
+    "responses": [
+        {
+            "response": "eightball 1"
+        },
+        {
+            "response": "eightball 2"
+        }
+    ]
+}

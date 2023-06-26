@@ -3,7 +3,7 @@ using Discord.Commands;
 using RunMode = Discord.Commands.RunMode;
 using PlatinumBot.Modules;
 
-namespace PlatinumBot.Modules;
+namespace PlatinumBot.Modules.Main;
 
 public class MainCommands : ModuleBase<ShardedCommandContext>
 {
@@ -15,7 +15,8 @@ public class MainCommands : ModuleBase<ShardedCommandContext>
         var path = "";
         var jsonLoader = new JSONLoader();
         jsonLoader.Load(path);
-        var arknightsOp = jsonLoader.GetOperator(arknightsOperator);
+        var arknightsOp = new Operator();
+        arknightsOp.LoadFromJson(jsonLoader);
         await Context.Message.Channel.SendMessageAsync($"Here is {arknightsOp.Name}! \nAnd here's their description:\n{arknightsOp.Description}");
     }
     [Command("skills", RunMode = RunMode.Async)]

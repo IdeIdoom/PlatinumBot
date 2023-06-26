@@ -2,7 +2,7 @@ using Discord;
 using Discord.Commands;
 using PlatinumBot.Services;
 
-namespace PlatinumBot.Modules;
+namespace PlatinumBot.Modules.Config;
 
 public class ConfigurationCommands : ModuleBase<ShardedCommandContext>
 {

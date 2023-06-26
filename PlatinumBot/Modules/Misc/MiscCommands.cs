@@ -2,8 +2,11 @@ using Discord;
 using Discord.Commands;
 using RunMode = Discord.Commands.RunMode;
 using PlatinumBot.Modules;
+using PlatinumBot.Data;
+using Newtonsoft.Json;
 
-namespace PlatinumBot.Modules;
+namespace PlatinumBot.Modules.Misc;
+
 
 public class MiscCommands : ModuleBase<ShardedCommandContext>
 {
@@ -24,6 +27,11 @@ public class MiscCommands : ModuleBase<ShardedCommandContext>
     [Command("8ball", RunMode = RunMode.Async)]
     public async Task EightBall()
     {
-        await Context.Message.ReplyAsync($"{Context.User.Username}'s result: 8ball fucking sucks!");
+        JSONLoader jsonLoader = new JSONLoader();
+        jsonLoader.Load("./data/eightball.json");
+        EightBallResponses? responses = JsonConvert.DeserializeObject<EightBallResponses>(jsonLoader.JsonData);
+        Random random = new Random();
+
+        await Context.Message.ReplyAsync($"{Context.User.Username}'s result: {responses?.Responses.ElementAt(random.Next(0, responses.Responses.Count)).Response}");
     }
 }
