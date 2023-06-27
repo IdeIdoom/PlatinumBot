@@ -2,9 +2,11 @@ using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Discord.Interactions;
 using Microsoft.Extensions.Configuration;
 using PlatinumBot.Common;
 using PlatinumBot.Init;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PlatinumBot.Services;
 
@@ -12,13 +14,16 @@ public class CommandHandler : ICommandHandler
 {
     private readonly DiscordShardedClient _client;
     private readonly CommandService _commands;
+    private readonly InteractionService _slashcommands;
     private char prefix = '.';
 
     public CommandHandler(
         DiscordShardedClient client,
+        InteractionService slashcommands,
         CommandService commands)
     {
         _client = client;
+        _slashcommands = slashcommands;
         _commands = commands;
     }
 
@@ -26,9 +31,12 @@ public class CommandHandler : ICommandHandler
     {
         // add the public modules that inherit InteractionModuleBase<T> to the InteractionService
         await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), Bootstrapper.ServiceProvider);
+        await _slashcommands.AddModulesAsync(Assembly.GetExecutingAssembly(), Bootstrapper.ServiceProvider);
 
         // Subscribe a handler to see if a message invokes a command.
         _client.MessageReceived += HandleCommandAsync;
+
+        _client.InteractionCreated += HandleSlashCommand;
 
         _commands.CommandExecuted += async (optional, context, result) =>
         {
@@ -45,6 +53,7 @@ public class CommandHandler : ICommandHandler
         }
     }
 
+    
     private async Task HandleCommandAsync(SocketMessage arg)
     {
         // Bail out if it's a System Message.
@@ -63,6 +72,25 @@ public class CommandHandler : ICommandHandler
         {
             var result = await _commands.ExecuteAsync(context, markPos, Bootstrapper.ServiceProvider);
         }
+    }
+
+    private async Task HandleSlashCommand (SocketInteraction arg) 
+    {
+        try
+            {
+                var ctx = new ShardedInteractionContext(_client, arg);
+                await _slashcommands.ExecuteCommandAsync(ctx, Bootstrapper.ServiceProvider);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                // if a Slash Command execution fails it is most likely that the original interaction acknowledgement will persist. It is a good idea to delete the original
+                // response, or at least let the user know that something went wrong during the command execution.
+                if(arg.Type == InteractionType.ApplicationCommand)
+                {
+                    await arg.GetOriginalResponseAsync().ContinueWith(async (msg) => await msg.Result.DeleteAsync());
+                }
+            }
     }
 
     public void SetPrefix(String prefix) 

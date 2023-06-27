@@ -1,5 +1,6 @@
 using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using RunMode = Discord.Commands.RunMode;
 using PlatinumBot.Modules;
 using PlatinumBot.Services;

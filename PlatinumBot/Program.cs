@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using PlatinumBot.Common;
 using PlatinumBot.Init;
@@ -27,12 +28,20 @@ var commands = new CommandService(new CommandServiceConfig
     CaseSensitiveCommands = false,
 });
 
+var interactions = new InteractionService(client, new InteractionServiceConfig
+{
+    EnableAutocompleteHandlers = true,
+    LogLevel = LogSeverity.Info,
+    AutoServiceScopes = true
+});
+
 var db = new DbService();
 db.Init();
 
 // Setup your DI container.
 Bootstrapper.Init();
 Bootstrapper.RegisterInstance(client);
+Bootstrapper.RegisterInstance(interactions);
 Bootstrapper.RegisterInstance(commands);
 Bootstrapper.RegisterType<ICommandHandler, CommandHandler>();
 Bootstrapper.RegisterInstance(config);
@@ -46,6 +55,7 @@ async Task MainAsync()
 
     client.ShardReady += async shard =>
     {
+        await interactions.RegisterCommandsGloballyAsync();
         await Logger.Log(LogSeverity.Info, "ShardReady", $"Shard Number {shard.ShardId} is connected and ready!");
     };
 
