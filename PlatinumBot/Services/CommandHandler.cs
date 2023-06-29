@@ -38,6 +38,11 @@ public class CommandHandler : ICommandHandler
 
         _client.InteractionCreated += HandleSlashCommand;
 
+        _client.AutocompleteExecuted += async (SocketAutocompleteInteraction arg) => {
+            var context = new Discord.Interactions.InteractionContext(_client, arg, arg.Channel);
+            await _slashcommands.ExecuteCommandAsync(context,services: Bootstrapper.ServiceProvider);
+        };
+
         _commands.CommandExecuted += async (optional, context, result) =>
         {
             if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
