@@ -15,7 +15,7 @@ public class MainCommands : ModuleBase<ShardedCommandContext>
     [Command("operator", RunMode = RunMode.Async)]
     public async Task Operator(String arknightsOperator)
     {
-        var arknightsOp = DbService.ArknightsOperators["arknightsOperator"];
+        var arknightsOp = DbService.ArknightsOperators[$"{arknightsOperator}"];
         await Context.Message.Channel.SendMessageAsync($"Here is {arknightsOp.Name}! \nAnd here's their description:\n{arknightsOp.Description}");
     }
     [Command("skills", RunMode = RunMode.Async)]
@@ -29,8 +29,9 @@ public class MainCommands : ModuleBase<ShardedCommandContext>
 
     }
     [Command("cg", RunMode = RunMode.Async)]
-    public async Task cg(String arknightsOperator, string cgName)
+    public async Task cg(String arknightsOperator, [Remainder] string cgName)
     {
-
+        var filepath = "./data/CG/";
+        await Context.Message.Channel.SendFileAsync($"{filepath}" + $"{DbService.OperatorCGPaths[$"{arknightsOperator}" + $" {cgName}"]}", DbService.ArknightsOperators[$"{arknightsOperator}"].Name);
     }
 }

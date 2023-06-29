@@ -1,3 +1,13 @@
 {
+    "operators": [
+        {
+            "Name" : "Platinum",
+            "Description": "Anti-air Sniper"
+        },
+        {
+            "Name" : "Kal'tsit",
+            "Description" : "Physician Medic"
+        }
+    ]
 
 }

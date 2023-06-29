@@ -11,7 +11,7 @@ namespace PlatinumBot.Modules.Main
         [SlashCommand("operator", "display operator overview")]
         public async Task Operator(String arknightsOperator)
         {
-        var arknightsOp = DbService.ArknightsOperators["arknightsOperator"];
+        var arknightsOp = DbService.ArknightsOperators[$"{arknightsOperator}"];
         await RespondAsync($"Here is {arknightsOp.Name}! \nAnd here's their description:\n{arknightsOp.Description}");
         }
     }

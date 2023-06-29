@@ -1,3 +1,25 @@
 {
-
+    "operators" : [
+        {
+            "Name" : "Platinum",
+            "CGs" : [
+                {
+                    "Name" : "E1",
+                    "Filename" : "char_204_platnm_1.png"
+                },
+                {
+                    "Name" : "E2",
+                    "Filename" : "char_204_platnm_2.png"
+                },
+                {
+                    "Name" : "Summer",
+                    "Filename" : "char_204_platnm_summer#3.png"
+                },
+                {
+                    "Name" : "Icon",
+                    "Filename" : "char_204_platnm.png"
+                }
+            ]
+        }
+    ]
 }
