@@ -15,7 +15,7 @@ public class CommandHandler : ICommandHandler
     private readonly DiscordShardedClient _client;
     private readonly CommandService _commands;
     private readonly InteractionService _slashcommands;
-    private char prefix = '.';
+    private string prefix = ".";
 
     public CommandHandler(
         DiscordShardedClient client,
@@ -68,13 +68,13 @@ public class CommandHandler : ICommandHandler
         var context = new ShardedCommandContext(_client, msg);
 
         var markPos = 0;
-        if (msg.HasCharPrefix(prefix, ref markPos))
+        if (msg.HasStringPrefix(prefix, ref markPos))
         {
             var result = await _commands.ExecuteAsync(context, markPos, Bootstrapper.ServiceProvider);
         }
     }
 
-    private async Task HandleSlashCommand (SocketInteraction arg) 
+    private async Task HandleSlashCommand(SocketInteraction arg) 
     {
         try
             {
@@ -95,6 +95,7 @@ public class CommandHandler : ICommandHandler
 
     public void SetPrefix(String prefix) 
     {
-        this.prefix = prefix.ToCharArray()[0];
+        // TODO: control prefix syntax and the guild it's from
+        this.prefix = prefix;
     }
 }

@@ -10,9 +10,9 @@ public class ConfigurationCommands : ModuleBase<ShardedCommandContext>
     public ICommandHandler commandHandler { get; set; }
 
     [Command("setprefix", RunMode = RunMode.Async)]
-    public async Task SetPrefix(String prefix)
+    public async Task SetPrefix(string prefix)
     {
-        commandHandler.SetPrefix(prefix);
+        await Task.Run(() => commandHandler.SetPrefix(prefix));
     }
     [Command("getprefix", RunMode = RunMode.Async)]
     public async Task GetPrefix()
