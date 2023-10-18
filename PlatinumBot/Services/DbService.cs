@@ -6,7 +6,8 @@ namespace PlatinumBot.Services;
 public class DbService 
 {
     public IDictionary<String, ArknightsOperator> ArknightsOperators { get; private set; } = new Dictionary<String, ArknightsOperator>(); 
-    public List<String> EightBallResponses {get; private set;} = new List<String>();    
+    public List<String> EightBallResponses {get; private set;} = new List<String>();
+    // TODO: Look into PostgreSQL
     public DbService()
     {
 
