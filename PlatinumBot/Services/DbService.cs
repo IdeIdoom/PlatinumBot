@@ -8,7 +8,7 @@ public class DbService
 {
     public IDictionary<String, ArknightsOperator> ArknightsOperators { get; private set; } = new Dictionary<String, ArknightsOperator>(); 
     public List<String> EightBallResponses {get; private set;} = new List<String>();    
-    public IDictionary<String, String> OperatorCGPaths { get; private set;} = new Dictionary<String, String>();
+    public IDictionary<String, List<CG>> OperatorCGPaths { get; private set;} = new Dictionary<String, List<CG>>();
     public DbService()
     {
 
@@ -57,10 +57,7 @@ public class DbService
                 {
                     foreach(var opCG in opCGList.operators)
                     {
-                        foreach(var cg in opCG.CGs)
-                        {
-                            OperatorCGPaths.Add($"{opCG.Name} {cg.Name}", cg.Filename);
-                        }
+                        OperatorCGPaths.Add(opCG.Name, opCG.CGs);
                     }
                 }
             }

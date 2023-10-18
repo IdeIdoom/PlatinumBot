@@ -32,6 +32,7 @@ public class MainCommands : ModuleBase<ShardedCommandContext>
     public async Task cg(String arknightsOperator, [Remainder] string cgName)
     {
         var filepath = "./data/CG/";
-        await Context.Message.Channel.SendFileAsync($"{filepath}" + $"{DbService.OperatorCGPaths[$"{arknightsOperator}" + $" {cgName}"]}", DbService.ArknightsOperators[$"{arknightsOperator}"].Name);
+        var cg = DbService.OperatorCGPaths[arknightsOperator].Where(predicate => predicate.Name == cgName).FirstOrDefault();
+        await Context.Message.Channel.SendFileAsync($"{filepath}{cg.Filename}", $"{DbService.ArknightsOperators[$"{arknightsOperator}"].Name} {cg.Name} Skin");
     }
 }
